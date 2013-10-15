@@ -7,22 +7,27 @@
 </body>
 
 <template name="hello">
-    <h1>Hello World!</h1>
-    {{greeting}}
-    <input type="button" value="Click" />
-    <select class='league-select'>
-    {{#each leagues}}
-      <option value="{{id}}">{{name}}</option>
-    {{/each}}
-    </select>
-    <select class='team-select'>
+    <h1>Slammo: Fantasy Roller Derby from Rinxter</h1>
+    <select id='team-select'>
     {{#each teams}}
       <option value="{{id}}">{{name}}</option>
     {{/each}}
     </select>
-    <select class='skater-select'>
+    <h2>Skaters</h2>
+    <table id='skater-select'>
+  		<tr>
+        <th>name</th>
+        <th>number</th>
+        <th>points</th>
+        <th>cost</th>
+      </tr>
     {{#each skaters}}
-      <option value="{{id}}">{{name}}</option> 
+  		<tr>
+        <td >{{name}}</td>
+        <td >{{skaterNumber}}</td>
+        <td >0</td>
+        <td >$0.00</td>
+      </tr>
     {{/each}}
-    </select>
+  </table>
 </template>

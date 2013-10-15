@@ -2,14 +2,15 @@ var Leagues = new Meteor.Collection("leagues");
 var Teams = new Meteor.Collection("teams");
 var Skaters = new Meteor.Collection("skaters");
 if (Meteor.isClient) {
+  Session.set("selectedLeagueId", "1");
   Template.hello.greeting = function () {
     return "Welcome to slammo.";
   };
   Template.hello.events({
-    'change .league-select' : function (event) {
-      Session.set("selectedLeagueId", event.currentTarget.value);
-    },
-    'change .team-select' : function (event) {
+    // 'change .league-select' : function (event) {
+    //   Session.set("selectedLeagueId", event.currentTarget.value);
+    // },
+    'change #team-select' : function (event) {
       Session.set("selectedTeamId", event.currentTarget.value);
     },
     'click input' : function () {
@@ -25,8 +26,8 @@ if (Meteor.isClient) {
     return Teams.find({league: Session.get("selectedLeagueId")});
   };
   Template.hello.skaters = function () {
-    console.log("skaters for team ", Session.get("selectedTeamId"), Teams.find({team: Session.get("selectedTeamId")}).fetch());
-    return Teams.find({team: Session.get("selectedTeamId")});
+    console.log("skaters for team ", Session.get("selectedTeamId"), Skaters.find({team: Session.get("selectedTeamId")}).fetch());
+    return Skaters.find({team: Session.get("selectedTeamId")});
   };
 }
 if (Meteor.isServer) {
@@ -38,24 +39,27 @@ if (Meteor.isServer) {
           type: "leagueList"
         }
       });
-      if (200 == leagueList.statusCode) {
-        var leagues_response = EJSON.parse(leagueResult.content);
-        Leagues.remove({});
-        var league = {}
-        for (i in leagues_response.rows) {
-          league.data = leagues_response.rows[i].data;
-          league.name = league.data[0];
-          league.id = leagues_response.rows[i].id;
-          if (league.name) {
-            Leagues.insert(league);
+      if (false) {
+        if (200 == leagueList.statusCode) {
+          var leagues_response = EJSON.parse(leagueResult.content);
+          Leagues.remove({});
+          var league = {}
+          for (i in leagues_response.rows) {
+            league.data = leagues_response.rows[i].data;
+            league.name = league.data[0];
+            league.id = leagues_response.rows[i].id;
+            if (league.name) {
+              Leagues.insert(league);
+            }
           }
+          console.log("finished loading leagues");
+        } else {
+          console.log("failure");
+          console.error(result.content);
         }
-        console.log("finished loading leagues");
-      } else {
-        console.log("failure");
-        console.error(result.content);
       }
     }
+    console.log("gonna load teams");
     if (Teams.find().fetch().length == 0) {
       var teamListResponse = HTTP.get("http://rinxter.net/wftda/ds", {
         params: {
@@ -63,6 +67,7 @@ if (Meteor.isServer) {
         }
       });
       if (200 == teamListResponse.statusCode) {
+        console.log("got team response:", teamListResponse);
         var teamList = EJSON.parse(teamListResponse.content);
         Teams.remove({});
         var team = {}
@@ -80,6 +85,8 @@ if (Meteor.isServer) {
         console.log("failure");
         console.error(teamListResponse.content);
       }
+    } else {
+      console.log("teams was already loaded somehow: ", Teams.find().fetch());
     }
     if (true || Skaters.find().fetch().length == 0) {
       var skaterListResponse = HTTP.get("http://rinxter.net/wftda/ds", {
@@ -99,7 +106,7 @@ if (Meteor.isServer) {
           skater.team = skater.data[3];
           skater.skaterNumber = skater.data[4];
           if (skater.name) {
-            console.log("inserting ", skater.name, "team", skater.team);
+            // console.log("inserting ", skater.name, "team", skater.team);
             Skaters.insert(skater);
           }
         }
