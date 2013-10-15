@@ -1,0 +1,28 @@
+<head>
+  <title>slammo</title>
+</head>
+
+<body>
+  {{> hello}}
+</body>
+
+<template name="hello">
+    <h1>Hello World!</h1>
+    {{greeting}}
+    <input type="button" value="Click" />
+    <select class='league-select'>
+    {{#each leagues}}
+      <option value="{{id}}">{{name}}</option>
+    {{/each}}
+    </select>
+    <select class='team-select'>
+    {{#each teams}}
+      <option value="{{id}}">{{name}}</option>
+    {{/each}}
+    </select>
+    <select class='skater-select'>
+    {{#each skaters}}
+      <option value="{{id}}">{{name}}</option> 
+    {{/each}}
+    </select>
+</template>
