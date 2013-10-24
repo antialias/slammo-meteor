@@ -19,7 +19,9 @@ if (Meteor.isClient) {
 		},
 		'click #refresh-database' : function () {
 		  // template data, if any, is available in 'this'
-		  Meteor.call('refreshDatabase');
+		  Meteor.call('refreshDatabase', function () {
+		  	Meteor.call("getSkatersForTeam", Session.get("selectedTeamId"));
+		  });
 		},
 		'click #empty-database' : function () {
 		  // template data, if any, is available in 'this'
