@@ -1,1 +1,11 @@
 /* CSS declarations go here */
+.debugger {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+}
+.team-selector {
+	margin-top: 1em;
+	font-weight: bold;
+	font-size: 16px;
+}

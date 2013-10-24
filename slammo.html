@@ -8,18 +8,26 @@
 
 <template name="hello">
     <h1>Slammo: Fantasy Roller Derby from Rinxter</h1>
+    <div>
+      database operations:
+      <button id='refresh-database'>refresh</button>
+      <button id='empty-database'>empty</button>
+    </div>
+    <div class='debugger'><button id='break-me'>debugger</button></div>
+    <div>Current League {{currentLeagueId}}</div>
+    <label class='team-selector'>Team:
     <select id='team-select'>
     {{#each teams}}
-      <option value="{{id}}">{{name}}</option>
+        <option value="{{id}}" {{selectedTeam id}}>{{name}}</option>
     {{/each}}
-    </select>
-    <h2>Skaters</h2>
+    </select></label>
     <table id='skater-select'>
   		<tr>
         <th>name</th>
         <th>number</th>
         <th>points</th>
         <th>cost</th>
+        <th></th>
       </tr>
     {{#each skaters}}
   		<tr>
@@ -27,6 +35,7 @@
         <td >{{skaterNumber}}</td>
         <td >0</td>
         <td >$0.00</td>
+        <td ><button disabled>draft</button></td>
       </tr>
     {{/each}}
   </table>
